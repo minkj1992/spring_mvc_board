@@ -18,11 +18,24 @@
 - Title
   - Fix : 동작하지 않는 부분을 수정 
   - Update : 정상동작하던 내용을 수정, 추가, 보완
+  - Set: 변수값 변경 등의 작은 수정에 사용
   - Add : 파일이 만들어질때
+  
+  - Prevent : 특정 처리를 못하게 막는다.
+  - Avoid : 특정 처리를 못하게 회피한다.
+  - Ensure : 무언가를 보장받는다. if문처럼 조건을 확실하게 주었을 때 사용
+
   - Remove : 삭제
   - Refactor : 전면 수정
   - Simplify : Refactor 약한 버전
   - Clean-up : 파일을 폴더에 넣거나 구조 정리할때
+  - Move : 파일 이동(Clean-up보다 적은 수정)
+  - Rename : 파일 이름 변경
+  - Revise : 문서 수정
+  - Correct : 문법 오류, 타입 변경, 이름 변경
+
+  - Verify : 검증 코드 넣을 경우
+
 
 - Message Pattern
   - [Title] + A               : A를 title 하다
