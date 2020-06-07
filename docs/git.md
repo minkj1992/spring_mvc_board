@@ -50,3 +50,12 @@ git 최신 commit 삭제
     
     git reset HEAD^
     git reset HEAD~2
+
+## commit 합치기
+> [git-rebase](https://cjh5414.github.io/git-rebase/)
+
+까먹고 추가로 올리거나, 올라가져있는 commit을 병합하고 싶을 때 사용한다.
+
+    git rebase -i HEAD~2
+
+이후 vi를 통해서 `squash`를 의미하는 `s`를 `pick`대신 사용해주면, pick된 Commit에 `s`가 적용된 commit을 넣어줄 수 있다.
