@@ -39,10 +39,12 @@ public class AccountController {
         if (errors.hasErrors()) {
             return "account/sign-up";
         }
-        accountService.processNewAccount(signUpForm);
+        Account newAccount = accountService.processNewAccount(signUpForm);
+        accountService.login(newAccount); // auto login
         return "redirect:/";
     }
 
+    //TODO: checkEmailToken 호출 시퀀스 생성하기
     @GetMapping("/check-email-token")
     public String checkEmailToken(String token, String email, Model model) {
         Account account = accountRepository.findByEmail(email);
@@ -59,6 +61,7 @@ public class AccountController {
         }
 
         account.completeSignUp();
+        accountService.login(account); // auto login
         model.addAttribute("numberOfUser", accountRepository.count());
         model.addAttribute("nickname", account.getNickname());
         return viewName;
