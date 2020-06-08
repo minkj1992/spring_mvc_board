@@ -1,5 +1,6 @@
 package com.minkj1992.board.account;
 
+import com.minkj1992.board.domain.Account;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 
 
 @Controller
@@ -18,6 +20,7 @@ public class AccountController {
 
     private final SignUpFormValidator signUpFormValidator;
     private final AccountService accountService;
+    private final AccountRepository accountRepository;
 
     // signUpForm이 바인딩 될때 마다 실행
     @InitBinder("signUpForm")
@@ -40,4 +43,25 @@ public class AccountController {
         return "redirect:/";
     }
 
+    @GetMapping("/check-email-token")
+    public String checkEmailToken(String token, String email, Model model) {
+        Account account = accountRepository.findByEmail(email);
+        String viewName = "account/checked-email";
+
+        if (account == null) {
+            model.addAttribute("error", "wrong.email");
+            return viewName;
+        }
+
+        if (!account.getEmailCheckToken().equals(token)) {
+            model.addAttribute("error", "wrong.token");
+            return viewName;
+        }
+
+        account.setEmailVerified(true);
+        account.setJoinedAt(LocalDateTime.now());
+        model.addAttribute("numberOfUser", accountRepository.count());
+        model.addAttribute("nickname", account.getNickname());
+        return viewName;
+    }
 }
