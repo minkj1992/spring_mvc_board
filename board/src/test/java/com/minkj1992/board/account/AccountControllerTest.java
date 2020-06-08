@@ -22,7 +22,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@Transactional
 @SpringBootTest
 @AutoConfigureMockMvc
 class AccountControllerTest {
@@ -56,6 +55,7 @@ class AccountControllerTest {
                 .andExpect(view().name("account/sign-up"))
                 .andExpect(unauthenticated());
     }
+
 
     @DisplayName("회원 가입 - 입력값 정상")
     @Test
@@ -96,6 +96,7 @@ class AccountControllerTest {
 
     @DisplayName("회원 가입 - 메일 인증 토큰 정상")
     @Test
+    @Transactional
     void checkEmailToken() throws Exception {
         String userName = "minkj1992";
         Account account = Account.builder()

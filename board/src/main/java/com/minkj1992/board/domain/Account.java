@@ -62,6 +62,6 @@ public class Account {
     }
 
     public boolean isValidEmailToken(String token) {
-        return this.getEmailCheckToken().equals(token);
+        return this.emailCheckToken.equals(token);
     }
 }

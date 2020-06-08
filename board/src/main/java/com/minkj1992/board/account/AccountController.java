@@ -2,6 +2,7 @@ package com.minkj1992.board.account;
 
 import com.minkj1992.board.domain.Account;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 public class AccountController {
 
     private final SignUpFormValidator signUpFormValidator;
@@ -55,7 +57,8 @@ public class AccountController {
             return viewName;
         }
 
-        if (account.isValidEmailToken(token)) {
+        if (!account.isValidEmailToken(token)) {
+            log.info("sl4j" + token + " : " + account.getEmailCheckToken());
             model.addAttribute("error", "wrong.token");
             return viewName;
         }
