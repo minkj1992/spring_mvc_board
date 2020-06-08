@@ -11,7 +11,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.then;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -55,15 +55,18 @@ class AccountControllerTest {
     @Test
     void signUpSubmit_with_correct_input() throws Exception {
         String userEmail = "minkj1992@email.com";
+        String userPassword = "jejulover";
         mockMvc.perform(post("/sign-up")
                 .param("nickname", "minkj1992")
                 .param("email", userEmail)
-                .param("password", "12345678")
+                .param("password", userPassword)
                 .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/"));
 
-        assertTrue(accountRepository.existsByEmail(userEmail));
+        Account newAccount = accountRepository.findByEmail(userEmail);
+        assertNotNull(newAccount);
+        assertNotEquals(newAccount.getPassword(), userPassword); // should encrpt
         then(javaMailSender).should().send(any(SimpleMailMessage.class));
     }
 }
