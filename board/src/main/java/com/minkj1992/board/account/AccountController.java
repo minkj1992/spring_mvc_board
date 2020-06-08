@@ -53,13 +53,12 @@ public class AccountController {
             return viewName;
         }
 
-        if (!account.getEmailCheckToken().equals(token)) {
+        if (account.isValidEmailToken(token)) {
             model.addAttribute("error", "wrong.token");
             return viewName;
         }
 
-        account.setEmailVerified(true);
-        account.setJoinedAt(LocalDateTime.now());
+        account.completeSignUp();
         model.addAttribute("numberOfUser", accountRepository.count());
         model.addAttribute("nickname", account.getNickname());
         return viewName;
