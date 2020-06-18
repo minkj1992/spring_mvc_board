@@ -2,6 +2,9 @@ package com.minkj1992.board.account;
 
 import com.minkj1992.board.domain.Account;
 import lombok.RequiredArgsConstructor;
+
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -16,6 +19,9 @@ import java.time.LocalDateTime;
 
 @Controller
 @RequiredArgsConstructor
+
+@Slf4j
+
 public class AccountController {
 
     private final SignUpFormValidator signUpFormValidator;
@@ -39,7 +45,9 @@ public class AccountController {
         if (errors.hasErrors()) {
             return "account/sign-up";
         }
-        accountService.processNewAccount(signUpForm);
+
+        Account newAccount = accountService.processNewAccount(signUpForm);
+        accountService.login(newAccount); // auto login
         return "redirect:/";
     }
 
@@ -53,13 +61,18 @@ public class AccountController {
             return viewName;
         }
 
-        if (!account.getEmailCheckToken().equals(token)) {
+
+        if (!account.isValidEmailToken(token)) {
+            log.info("sl4j" + token + " : " + account.getEmailCheckToken());
+
             model.addAttribute("error", "wrong.token");
             return viewName;
         }
 
-        account.setEmailVerified(true);
-        account.setJoinedAt(LocalDateTime.now());
+
+        account.completeSignUp();
+        accountService.login(account); // auto login
+
         model.addAttribute("numberOfUser", accountRepository.count());
         model.addAttribute("nickname", account.getNickname());
         return viewName;
