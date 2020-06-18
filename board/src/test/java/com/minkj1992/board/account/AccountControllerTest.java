@@ -10,14 +10,18 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.test.web.servlet.MockMvc;
+
 import org.springframework.transaction.annotation.Transactional;
+
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.then;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -41,6 +45,7 @@ class AccountControllerTest {
                 .andExpect(view().name("account/sign-up"))
                 .andExpect(model().attributeExists("signUpForm"))
                 .andExpect(unauthenticated());
+
     }
 
     @DisplayName("회원 가입 - 입력값 오류")
@@ -52,6 +57,7 @@ class AccountControllerTest {
                 .param("password", "12345")
                 .with(csrf()))
                 .andExpect(status().isOk())
+
                 .andExpect(view().name("account/sign-up"))
                 .andExpect(unauthenticated());
     }
@@ -62,6 +68,7 @@ class AccountControllerTest {
     void signUpSubmit_with_correct_input() throws Exception {
         String userEmail = "minkj1992@email.com";
         String userPassword = "jejulover";
+
         String userName = "minkj1992";
         mockMvc.perform(post("/sign-up")
                 .param("nickname", userName)
